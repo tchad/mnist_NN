@@ -1,0 +1,1 @@
+Class design project implementing simple inference engine FPGA synthesizable model of fully connected neural network for handwritten digit recognition. The model tests varous number representations for accuracy and memory usage.

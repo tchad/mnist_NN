@@ -1,0 +1,4 @@
+xelab tst1_dnn_fix_relu -s tst1_sim
+xelab tst2_dnn_fix_sigmoid -s tst2_sim
+xelab tst3_dnn_ulaw -s tst3_sim
+xelab tst4_dnn_fp16 -s tst4_sim

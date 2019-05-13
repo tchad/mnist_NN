@@ -1,0 +1,70 @@
+Folders:
+    report - latex code for the prject report
+    sim - simulation scripts, simulation results, generated graphs
+    src - source code
+        data - generated memory content
+        gen - scripts generating memory content
+        rtl - verilog code
+            common - modules common across number representations
+            fix - fixed point 
+            fp - floating point half precision
+            ulaw - ulaw representation
+            top - top wrappers used to synthesize the design on zybo board(SYNTHESIS ONLY), simulation uses the dnn_* modules in folders specific to number representation, top module was needed due to insufficient IO to perform implementation/place and route using dnn_ modules
+        tb -testbenches
+            tests - primary tests used in device evaluation
+            sim/mem.sv - memory model used for simulation purposes
+   synthesis - synthesis scripts
+
+
+##### Simulation:
+
+All steps performed on Linux but possible to execute on Windows
+
+1. Generate memory data. No need to repeat the step if the memeory structure/scripts did not changed.
+
+Project requires new version of python 3.5+ 
+DO NOT USE PYTHON 2.7!!!!!!!!
+
+Running the python code:
+
+from project directory
+virtualenv -p /usr/bin/python3 env
+source env/bin/activate
+pip install numpy matplotlib scipy bitstring
+cd src/gen
+python main.py
+
+
+2. simualtion
+Scripts execute vivado tools from console that compilexecute, elaborate and run xsim to simulate the test benches from tb/tests directory. Running from console is necesarry as the logging tools from withing Vivado cause significant memory loss overtime and are unable to run the entire simulation cycle.
+
+From project directory
+source /opt/Xilinx/Vivado/<version>/settings64.sh
+cd sim
+./compile
+./elaborate
+./run_test
+The run_test script can take up to 4 hours, alternatively the run_test[1-4] sscipts can be run in separate consoles
+
+the results folder contains the results of the simulation
+
+python gen_plots.py will generate graphs showing success and error rate
+
+
+##### Synthesis
+Open vivado and start project for Zybo board(tested on Zybo-Z7-20).
+Create project in the directory such that the Vivado project resides at the same level as the project directory.
+(Example: dnn/project_1
+          dnn/prj4
+
+Add entire rtl directory as design sources. Uncheck the copy source files box.
+
+Go to Tools->Run Tcl Script and tune the run.tcl script from synthesis directory.
+
+The script will go through every top module and synthesize all designs for different representations and for botg relu and sigmoid activation functions. After each syntesis and implementation the usage report is saved in the form of top_*.txt file showing the resources needed for specific configuration.
+
+The synthesis might take around two hours.
+
+run: python gen_plots.py from within python virtual env to generate usage statistics plots.
+
+

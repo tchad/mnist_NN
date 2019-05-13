@@ -1,0 +1,1 @@
+xvlog --sv ../src/rtl/common/* ../src/rtl/fix/* ../src/rtl/fp/* ../src/rtl/ulaw/* ../src/tb/sim/* ../src/tb/tests/*
